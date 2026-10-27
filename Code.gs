@@ -1,7 +1,7 @@
 const SPREADSHEET_ID = '1twLy2YkNRSSEW3TS3baUusN1pF-WXcUqXfEUcNqYuUk';
 const ALLOWED_DOMAIN = 'northsidechs.org';
 const GAME_SOURCE_BASE = 'https://raw.githubusercontent.com/dwallace87-lgtm/billofrightsgame/main/chunks/game.part.';
-const GAME_PART_COUNT = 39;
+const GAME_PART_COUNT = 40;
 const PROGRESS_SHEET = 'Student Progress';
 const ATTEMPT_SHEET = 'Attempt Log';
 const STATE_SHEET = 'State Store';
