@@ -94,6 +94,22 @@ function saveStudentProgress(stateJson, clientTime) {
       progress,
       String(clientTime || ''),
     ]]);
+    const reviewSteps = Object.keys(stats).filter(key => Number((stats[key] || {}).t || 0) >= 3 || Number((stats[key] || {}).r || 0) > 0);
+    const resets = Object.keys(stats).reduce((sum, key) => sum + Number((stats[key] || {}).r || 0), 0);
+    const arcade = state.miniGames || {};
+    const arcadeStatus = [1, 2, 4].map(n => 'A' + n + ': ' + (arcade[n] && arcade[n].completed ? 'complete' : arcade[n] && arcade[n].lastPlayed ? 'in progress' : 'not started')).join(' | ');
+    const reviewHeaders = ['Review Needed', 'Case Resets', 'Review Steps', 'Arcade Status'];
+    const currentHeaders = progressSheet.getRange(2, 1, 1, Math.max(16, progressSheet.getLastColumn())).getDisplayValues()[0];
+    const reviewColumns = reviewHeaders.map(header => {
+      let col = currentHeaders.findIndex(value => value === header) + 1;
+      if (!col) {
+        col = currentHeaders.findIndex((value, i) => i >= 12 && !value) + 1 || currentHeaders.length + 1;
+        currentHeaders[col - 1] = header;
+        progressSheet.getRange(2, col).setValue(header);
+      }
+      return col;
+    });
+    [reviewSteps.length ? 'REVIEW NEEDED' : '', resets, reviewSteps.join('; '), arcadeStatus].forEach((value, i) => progressSheet.getRange(progressRow, reviewColumns[i]).setValue(value));
     SpreadsheetApp.flush();
     return { ok: true, savedAt: now.toISOString() };
   } finally {
