@@ -1,5 +1,5 @@
 const SPREADSHEET_ID = '1twLy2YkNRSSEW3TS3baUusN1pF-WXcUqXfEUcNqYuUk';
-const ALLOWED_DOMAIN = 'northsidechs.org';
+const ALLOWED_DOMAINS = ['northsidechs.org', 'students.northsidechs.org'];
 const GAME_SOURCE_BASE = 'https://raw.githubusercontent.com/dwallace87-lgtm/billofrightsgame/main/chunks/game.part.';
 const GAME_PART_COUNT = 40;
 const PROGRESS_SHEET = 'Student Progress';
@@ -159,8 +159,9 @@ function recordAttempts(events) {
 
 function requireSchoolUser_() {
   const email = String(Session.getActiveUser().getEmail() || '').trim().toLowerCase();
-  if (!email || !email.endsWith('@' + ALLOWED_DOMAIN)) {
-    throw new Error('Access is limited to @' + ALLOWED_DOMAIN + ' Google accounts.');
+  const domain = email.split('@')[1] || '';
+  if (!ALLOWED_DOMAINS.includes(domain)) {
+    throw new Error('Sign in with your Northside staff or student Google account.');
   }
   return { email: email };
 }
